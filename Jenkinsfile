@@ -18,7 +18,7 @@ pipeline {
    when { expression { params.RUN_SONAR } }
    steps {
     withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-     sh 'mvn -B -ntp org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar -Dsonar.projectKey=fst-events -Dsonar.qualitygate.wait=true'
+     sh 'mvn -B -ntp org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar -Dsonar.projectKey=FSTevents-microservices -Dsonar.qualitygate.wait=true'
     }
    }
   }
