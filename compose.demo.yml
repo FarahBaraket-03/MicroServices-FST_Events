@@ -1,0 +1,10 @@
+services:
+  participant-service:
+    environment:
+      DEMO_FAULTS_ENABLED: 'true'
+  participant-service-2:
+    environment:
+      DEMO_FAULTS_ENABLED: 'true'
+  logistics-service:
+    environment:
+      DEMO_FAULTS_ENABLED: 'true'

@@ -1,0 +1,14 @@
+# Merge this job into the existing prometheus.yml scrape_configs list.
+# These DNS names resolve because Prometheus and the services share devops.
+- job_name: events-microservices
+  metrics_path: /actuator/prometheus
+  scrape_interval: 5s
+  static_configs:
+    - targets:
+        - config-server:8888
+        - eureka-server:8761
+        - api-gateway:8080
+        - participant-service:8081
+        - logistics-service:8082
+        - event-service:8083
+    # Add participant-service-2:8081 when the scale profile is running.

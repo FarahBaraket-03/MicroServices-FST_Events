@@ -1,0 +1,186 @@
+{
+  "info": {
+    "name": "FST Events Microservices DS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Run requests 01-05 in order. Repeat 03 until the asynchronous projection is ready. Use scripts/smoke.ps1 for automated polling. Failure demos: docs/DEMO.md."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8090"
+    },
+    {
+      "key": "participantId",
+      "value": ""
+    },
+    {
+      "key": "logisticsId",
+      "value": ""
+    },
+    {
+      "key": "eventId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Create participant",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/participants",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nom\": \"Demo\",\n  \"prenom\": \"Ahmed\",\n  \"tache\": \"ORGANISATEUR\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Created\",()=>pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"participantId\",pm.response.json().idPart);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 Create logistics - command",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/logistics/commands",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"description\": \"DS chairs\",\n  \"reserve\": true,\n  \"prixUnit\": 12.5,\n  \"quantite\": 4\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Command accepted\",()=>pm.response.to.have.status(202));",
+              "pm.collectionVariables.set(\"logisticsId\",pm.response.json().idLog);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 Read logistics projection - repeat until ready",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/logistics/queries/{{logisticsId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Projection is ready (repeat if 404)\",()=>pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 Create event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/events",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"description\": \"DS conference\",\n  \"dateDebut\": \"2027-01-15\",\n  \"dateFin\": \"2027-01-16\",\n  \"participantIds\": [\n    {{participantId}}\n  ],\n  \"logisticsIds\": [\n    \"{{logisticsId}}\"\n  ]\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Created\",()=>pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"eventId\",pm.response.json().idEvent);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 Event statistics - normal or fallback",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/event-stats/{{eventId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Readable response\",()=>pm.response.to.have.status(200));",
+              "const s=pm.response.json();",
+              "pm.test(\"No invented cost during failure\",()=>{if(s.degraded && s.nbLogistics===null) pm.expect(s.coutLogistiqueReservee).to.eql(null);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 Global summary",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/event-stats/summary"
+      }
+    },
+    {
+      "name": "07 Instance through Gateway",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/demo/participant-instance"
+      }
+    },
+    {
+      "name": "08 Reserve or release - command",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": "{{baseUrl}}/api/logistics/commands/{{logisticsId}}/reservation?reserved=false"
+      }
+    },
+    {
+      "name": "09 Circuit breaker events (local admin port)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:8093/actuator/circuitbreakerevents"
+      }
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-22",
+  "backend": "PASS",
+  "frontend": "PASS",
+  "tests": [
+    {
+      "name": "tn.fst.eventservice.EventServiceTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "tn.fst.eventservice.RemoteCatalogServiceTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "tn.fst.eventservice.ResiliencePolicyTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "tn.fst.logisticsservice.LogisticsAggregateTest",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "tn.fst.logisticsservice.LogisticsApiIntegrationTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "tn.fst.logisticsservice.LogisticsProjectorTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "tn.fst.participantservice.ParticipantControllerTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "full_docker_stack": "NOT_RUN",
+  "existing_devops_integration": "NOT_RUN",
+  "powershell_scripts": "NOT_RUN"
+}

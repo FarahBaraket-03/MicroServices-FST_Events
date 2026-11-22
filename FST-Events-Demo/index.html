@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FST Events · Console de démonstration</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f4ef;color:#192d32;font:16px/1.5 "Segoe UI",sans-serif}header{background:#143639;color:white;padding:26px max(5vw,24px)}nav{display:flex;gap:18px;flex-wrap:wrap}a{color:inherit}header nav{color:#b8ded1;font-size:.9rem}main{max-width:1200px;margin:auto;padding:30px 24px}h1{font-size:clamp(2rem,4vw,3rem);letter-spacing:-.04em;margin:0 0 8px}h2{margin:0;font-size:1.3rem}p{margin:6px 0 14px}button{border:1px solid #91a8a2;color:#16463c;background:white;border-radius:7px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.primary{background:#155a49;color:white;border-color:#155a49}.toolbar,.item{display:flex;align-items:center;justify-content:space-between;gap:16px}.toolbar{margin-bottom:22px;flex-wrap:wrap}.layout{display:grid;grid-template-columns:1fr 1.18fr;gap:22px;align-items:start}article,aside{background:white;border:1px solid #d3ded7;border-radius:12px;padding:20px}.item{border-top:1px solid #dce3de;padding:12px 0}.item:last-child{padding-bottom:0}.item small{display:block;color:#516560}.item button{font-size:.85rem}aside{position:sticky;top:15px}.phase{background:#e8f0ea;padding:10px 12px;border-radius:6px}.result{border-top:1px solid #cedbd5;padding:12px 0}summary{cursor:pointer}pre{background:#f2f5f3;padding:10px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:300px;overflow:auto}.pass{color:#14664b}.fail{color:#962d20}.running{color:#82570c}h3{margin:18px 0 6px;font-size:.97rem;color:#49665e}details details{margin:5px 0 0 12px;font-size:.92rem}footer{font-size:.88rem;margin-top:22px;color:#52635c}@media(max-width:780px){.layout{grid-template-columns:1fr}aside{position:static}}
+</style>
+<header><h1>FST Events</h1><nav aria-label="Outils du projet" id="links"></nav></header>
+<main><section class="toolbar"><div><h2>Démonstration des microservices</h2><p>Choisissez une expérience ou lancez le parcours complet sur Docker Desktop.</p></div><button class="primary" id="all">▶ Tout exécuter</button></section>
+<div class="layout"><article><h2>Scénarios</h2><div id="cases"></div></article>
+<aside><h2>Résultats en direct</h2><p class="phase" id="phase" role="status">Connexion au projet…</p><div id="results"></div></aside></div>
+<footer>Les pannes modifient temporairement votre projet local. Gardez Docker Desktop et la fenêtre du lanceur ouverts jusqu’à la fin de la restauration.</footer></main>
+<script>
+const catalog=[
+['Parcours métier','normal','Statistiques de l’événement','Une personne et quatre chaises à 12,50 donnent un coût réservé de 50.'],
+['Distribution','balance','Répartition des requêtes','Observer deux identifiants de participant-service derrière la même URL.'],
+['Résilience','down','Service arrêté','Arrêter Logistics et lire les statistiques partielles.'],
+['Résilience','slow','Réponse lente','Comparer le délai de six secondes au timeout de cinq secondes.'],
+['Résilience','invalid','Réponse incorrecte','Observer le contenu invalide malgré un statut HTTP 200.'],
+['Résilience','url','URL mal configurée','Logistics répond en direct. Event Service utilise un chemin erroné.'],
+['Résilience','db','Base de données arrêtée','Interrompre MySQL Logistics et observer la lecture en échec.'],
+['Protection','limit','Limitation du débit','Envoyer quinze requêtes simultanées et compter les réponses 429.'],
+['CQRS','cqrs','Réservation logistique','Créer, lire la projection, tester les règles de réservation puis supprimer.']];
+const tools=[['Grafana',3000,''],['Prometheus',9090,'/targets'],['Zipkin',9411,''],['Eureka',8761,''],['Axon',8024,''],['Swagger',8092,'/swagger-ui/index.html'],['Jenkins',8080,''],['SonarQube',9000,''],['Nexus',8081,'']];
+function element(tag,text){const e=document.createElement(tag);e.textContent=text;return e}
+for(const [name,port,path] of tools){const a=element('a',name);a.href='http://localhost:'+port+path;a.target='_blank';a.rel='noopener';links.append(a)}
+let group='',previous='',pending=false,busy=false;
+for(const [section,id,title,description] of catalog){if(section!==group){cases.append(element('h3',section));group=section}
+const row=element('div','');row.className='item';const copy=element('div','');copy.append(element('strong',title),element('small',description));const b=element('button','Lancer');b.onclick=()=>run(id);row.append(copy,b);cases.append(row)}
+function disable(flag){document.querySelectorAll('button').forEach(b=>b.disabled=flag)}
+async function run(id){pending=true;disable(true);try{const r=await fetch('/run/'+id,{method:'POST',headers:{'X-Demo-Key':'__TOKEN__'}});if(!r.ok)throw Error('HTTP '+r.status);previous='';await update()}catch(e){phase.textContent='Démarrage impossible • '+e.message}finally{pending=false;disable(busy)}}
+all.onclick=()=>run('all');
+function render(rows){
+const opened=new Set([...results.querySelectorAll('details[open]')].map(d=>d.dataset.key));results.replaceChildren();
+if(!rows.length)results.append(element('p','Lancez « Statistiques de l’événement » pour vérifier la situation de départ.'));
+for(const [i,row] of rows.entries()){const card=element('details','');card.className='result';card.dataset.key=row.case;card.open=opened.has(row.case)||i===rows.length-1;
+const title=catalog.find(c=>c[1]===row.case)[2];const s=element('summary',({pass:'✓ Validé',fail:'✕ À vérifier',running:'● En cours'})[row.status]+' · '+title);s.className=row.status;card.append(s);
+for(const [j,[label,value]] of row.steps.entries()){const d=element('details','');d.dataset.key=row.case+j;d.open=opened.has(d.dataset.key);let caption=label;
+if(value&&value.réponse&&typeof value.réponse.degraded==='boolean'){const v=value.réponse;caption+=' · coût '+(v.coutLogistiqueReservee??'indisponible')+' · degraded = '+v.degraded}
+d.append(element('summary',caption),element('pre',typeof value==='string'?value:JSON.stringify(value,null,2)));card.append(d)}results.append(card)}}
+async function update(){try{const r=await fetch('/state',{cache:'no-store'});if(!r.ok)throw Error();const data=await r.json();busy=data.busy;disable(busy||pending);phase.textContent=data.phase;const key=JSON.stringify(data.rows);if(previous!==key){render(data.rows);previous=key}}catch{busy=true;disable(true);phase.textContent='Console inaccessible. Ouvrez Lancer.cmd dans le dossier demo-console.'}}
+async function poll(){await update();setTimeout(poll,1000)}poll();
+</script></html>

@@ -1,0 +1,32 @@
+server:
+  port: ${PORT:8090}
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: participants
+              uri: lb://participant-service
+              predicates:
+                - Path=/api/participants,/api/participants/**
+              filters:
+                - StripPrefix=1
+            - id: logistics
+              uri: lb://logistics-service
+              predicates:
+                - Path=/api/logistics,/api/logistics/**
+              filters:
+                - StripPrefix=1
+            - id: events
+              uri: lb://event-service
+              predicates:
+                - Path=/api/events,/api/events/**,/api/event-stats,/api/event-stats/**
+              filters:
+                - StripPrefix=1
+            - id: participant-instance-demo
+              uri: lb://participant-service
+              predicates:
+                - Path=/api/demo/participant-instance
+              filters:
+                - SetPath=/internal/instance

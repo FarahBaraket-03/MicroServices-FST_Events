@@ -1,0 +1,31 @@
+server:
+  port: ${PORT:8092}
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 5
+      connection-timeout: 3000
+    url: ${DB_URL:jdbc:mysql://localhost:3308/logistics_db}
+    username: ${DB_USER:events}
+    password: ${DB_PASSWORD:events_local}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+app:
+  demo-faults-enabled: ${DEMO_FAULTS_ENABLED:false}
+axon:
+  axonserver:
+    servers: ${AXON_SERVERS:localhost:8124}
+  serializer:
+    general: jackson
+    events: jackson
+    messages: jackson
+  eventhandling:
+    processors:
+      logistics-projection:
+        mode: tracking

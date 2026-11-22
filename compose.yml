@@ -1,0 +1,352 @@
+name: fst-events
+services:
+  mysql-participant:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: participant_db
+      MYSQL_USER: events
+      MYSQL_PASSWORD: ${DB_PASSWORD:-events_local}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-local_root_only}
+    ports:
+    - 127.0.0.1:${PARTICIPANT_DB_PORT:-3307}:3306
+    volumes:
+    - participant-db:/var/lib/mysql
+    command:
+    - --innodb-buffer-pool-size=128M
+    - --max-connections=60
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - mysqladmin ping -h 127.0.0.1 -u root -p"$$MYSQL_ROOT_PASSWORD" --silent
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    mem_limit: 512m
+    networks:
+    - devops
+  mysql-logistics:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: logistics_db
+      MYSQL_USER: events
+      MYSQL_PASSWORD: ${DB_PASSWORD:-events_local}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-local_root_only}
+    ports:
+    - 127.0.0.1:${LOGISTICS_DB_PORT:-3308}:3306
+    volumes:
+    - logistics-db:/var/lib/mysql
+    command:
+    - --innodb-buffer-pool-size=128M
+    - --max-connections=60
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - mysqladmin ping -h 127.0.0.1 -u root -p"$$MYSQL_ROOT_PASSWORD" --silent
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    mem_limit: 512m
+    networks:
+    - devops
+  mysql-event:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: event_db
+      MYSQL_USER: events
+      MYSQL_PASSWORD: ${DB_PASSWORD:-events_local}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-local_root_only}
+    ports:
+    - 127.0.0.1:${EVENT_DB_PORT:-3309}:3306
+    volumes:
+    - event-db:/var/lib/mysql
+    command:
+    - --innodb-buffer-pool-size=128M
+    - --max-connections=60
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - mysqladmin ping -h 127.0.0.1 -u root -p"$$MYSQL_ROOT_PASSWORD" --silent
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    mem_limit: 512m
+    networks:
+    - devops
+  axonserver:
+    image: axoniq/axonserver:2024.2.2
+    environment:
+      AXONIQ_AXONSERVER_STANDALONE: 'true'
+      AXONIQ_AXONSERVER_HOSTNAME: axonserver
+      AXONIQ_AXONSERVER_DEVMODE_ENABLED: 'true'
+    ports:
+    - 127.0.0.1:${AXON_HTTP_PORT:-8024}:8024
+    - 127.0.0.1:${AXON_GRPC_PORT:-8124}:8124
+    volumes:
+    - axon-data:/axonserver/data
+    - axon-events:/axonserver/events
+    - axon-config:/axonserver/config
+    mem_limit: 768m
+    networks:
+    - devops
+  zipkin:
+    image: openzipkin/zipkin:3.5
+    ports:
+    - 127.0.0.1:${ZIPKIN_HOST_PORT:-9411}:9411
+    mem_limit: 384m
+    networks:
+    - devops
+  config-server:
+    build:
+      context: .
+      dockerfile: ops/Dockerfile
+      args:
+        SERVICE: config-server
+    image: fst-events/config-server:local
+    environment:
+      PORT: '8888'
+      INSTANCE_ID: config-server
+      ZIPKIN_URL: http://zipkin:9411/api/v2/spans
+      CONFIG_REPO: file:/config-repo
+    ports:
+    - 127.0.0.1:${CONFIG_HOST_PORT:-8888}:8888
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS http://localhost:8888/actuator/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+    mem_limit: 512m
+    networks:
+    - devops
+    volumes:
+    - ./config-repo:/config-repo:ro
+  eureka-server:
+    build:
+      context: .
+      dockerfile: ops/Dockerfile
+      args:
+        SERVICE: eureka-server
+    image: fst-events/eureka-server:local
+    environment:
+      PORT: '8761'
+      INSTANCE_ID: eureka-server
+      ZIPKIN_URL: http://zipkin:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+    ports:
+    - 127.0.0.1:${EUREKA_HOST_PORT:-8761}:8761
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS http://localhost:8761/actuator/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+    mem_limit: 512m
+    networks:
+    - devops
+    depends_on:
+      config-server:
+        condition: service_healthy
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ops/Dockerfile
+      args:
+        SERVICE: api-gateway
+    image: fst-events/api-gateway:local
+    environment:
+      PORT: '8080'
+      INSTANCE_ID: api-gateway
+      ZIPKIN_URL: http://zipkin:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+    ports:
+    - 127.0.0.1:${GATEWAY_HOST_PORT:-8090}:8080
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS http://localhost:8080/actuator/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+    mem_limit: 512m
+    networks:
+    - devops
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+  participant-service:
+    build:
+      context: .
+      dockerfile: ops/Dockerfile
+      args:
+        SERVICE: participant-service
+    image: fst-events/participant-service:local
+    environment:
+      PORT: '8081'
+      INSTANCE_ID: participant-service
+      ZIPKIN_URL: http://zipkin:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      DB_URL: jdbc:mysql://mysql-participant:3306/participant_db
+      DB_USER: events
+      DB_PASSWORD: ${DB_PASSWORD:-events_local}
+      DEMO_FAULTS_ENABLED: ${DEMO_FAULTS_ENABLED:-false}
+    ports:
+    - 127.0.0.1:${PARTICIPANT_HOST_PORT:-8091}:8081
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS http://localhost:8081/actuator/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+    mem_limit: 512m
+    networks:
+    - devops
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      mysql-participant:
+        condition: service_healthy
+  logistics-service:
+    build:
+      context: .
+      dockerfile: ops/Dockerfile
+      args:
+        SERVICE: logistics-service
+    image: fst-events/logistics-service:local
+    environment:
+      PORT: '8082'
+      INSTANCE_ID: logistics-service
+      ZIPKIN_URL: http://zipkin:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      DB_URL: jdbc:mysql://mysql-logistics:3306/logistics_db
+      DB_USER: events
+      DB_PASSWORD: ${DB_PASSWORD:-events_local}
+      DEMO_FAULTS_ENABLED: ${DEMO_FAULTS_ENABLED:-false}
+      AXON_SERVERS: axonserver:8124
+    ports:
+    - 127.0.0.1:${LOGISTICS_HOST_PORT:-8092}:8082
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS http://localhost:8082/actuator/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+    mem_limit: 768m
+    networks:
+    - devops
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      mysql-logistics:
+        condition: service_healthy
+      axonserver:
+        condition: service_started
+  event-service:
+    build:
+      context: .
+      dockerfile: ops/Dockerfile
+      args:
+        SERVICE: event-service
+    image: fst-events/event-service:local
+    environment:
+      PORT: '8083'
+      INSTANCE_ID: event-service
+      ZIPKIN_URL: http://zipkin:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      DB_URL: jdbc:mysql://mysql-event:3306/event_db
+      DB_USER: events
+      DB_PASSWORD: ${DB_PASSWORD:-events_local}
+      DEMO_FAULTS_ENABLED: ${DEMO_FAULTS_ENABLED:-false}
+      COST_JOB_ENABLED: ${COST_JOB_ENABLED:-false}
+    ports:
+    - 127.0.0.1:${EVENT_HOST_PORT:-8093}:8083
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS http://localhost:8083/actuator/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+    mem_limit: 512m
+    networks:
+    - devops
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      mysql-event:
+        condition: service_healthy
+  participant-service-2:
+    build:
+      context: .
+      dockerfile: ops/Dockerfile
+      args:
+        SERVICE: participant-service
+    image: fst-events/participant-service:local
+    environment:
+      PORT: '8081'
+      INSTANCE_ID: participant-service-2
+      ZIPKIN_URL: http://zipkin:9411/api/v2/spans
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      DB_URL: jdbc:mysql://mysql-participant:3306/participant_db
+      DB_USER: events
+      DB_PASSWORD: ${DB_PASSWORD:-events_local}
+      DEMO_FAULTS_ENABLED: ${DEMO_FAULTS_ENABLED:-false}
+    ports:
+    - 127.0.0.1:${PARTICIPANT2_HOST_PORT:-8094}:8081
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS http://localhost:8081/actuator/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+    mem_limit: 512m
+    networks:
+    - devops
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      mysql-participant:
+        condition: service_healthy
+    profiles:
+    - scale
+networks:
+  devops:
+    external: true
+    name: ${DOCKER_NETWORK:-devops}
+volumes:
+  participant-db: {}
+  logistics-db: {}
+  event-db: {}
+  axon-data: {}
+  axon-events: {}
+  axon-config: {}

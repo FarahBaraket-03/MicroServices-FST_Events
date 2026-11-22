@@ -1,0 +1,12 @@
+Summary,Issue Type,Description
+Prepare build and contracts,Task,"Maven reactor, compatible versions, DTO contracts"
+Set up Config Eureka Gateway,Task,"Central configuration and discovery with local ports"
+Extract participants,Task,"CRUD and independent MySQL database"
+Extract events and Feign,Task,"ID references, composition, exact monetary calculation"
+Implement logistics CQRS,Task,"Aggregate commands events projection query handlers"
+Prove resilience,Task,"Five failure scenarios, retry, circuit breaker, timeout, fallback"
+Prove load balancing,Task,"Two participant instances and instance identity"
+Connect existing observability tools,Task,"Prometheus devops targets, Grafana dashboard, Zipkin trace"
+Integrate Angular,Task,"Gateway API and honest partial-data display"
+Configure Jenkins Sonar Nexus,Task,"Verify, analyze and publish with credentials binding"
+Prepare defense,Task,"Scenario evidence and explanation of design decisions"

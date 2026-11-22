@@ -1,0 +1,4 @@
+services:
+  event-service:
+    environment:
+      APP_CLIENTS_LOGISTICS_URL: http://logistics-service:8082/not-a-real-api
