@@ -1,0 +1,53 @@
+<svg width="303pt" height="207pt"
+ viewBox="0.00 0.00 303.10 206.60" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g class="graph" transform="scale(1 1) rotate(0) translate(10.8 195.8)">
+<title>Limitation du débit</title>
+<!-- n0 -->
+<g class="node">
+<title>n0</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M234,-185C234,-185 60,-185 60,-185 54,-185 48,-179 48,-173 48,-173 48,-161 48,-161 48,-155 54,-149 60,-149 60,-149 234,-149 234,-149 240,-149 246,-155 246,-161 246,-161 246,-173 246,-173 246,-179 240,-185 234,-185"/>
+<text text-anchor="middle" x="147" y="-163.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">15 requêtes simultanées</text>
+</g>
+<!-- n1 -->
+<g class="node">
+<title>n1</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M257,-126C257,-126 37,-126 37,-126 31,-126 25,-120 25,-114 25,-114 25,-92 25,-92 25,-86 31,-80 37,-80 37,-80 257,-80 257,-80 263,-80 269,-86 269,-92 269,-92 269,-114 269,-114 269,-120 263,-126 257,-126"/>
+<text text-anchor="middle" x="147" y="-106.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Limiteur des statistiques</text>
+<text text-anchor="middle" x="147" y="-91.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">5 requêtes / seconde / instance</text>
+</g>
+<!-- n0&#45;&gt;n1 -->
+<g class="edge">
+<title>n0&#45;&gt;n1</title>
+<path fill="none" stroke="#64818a" d="M147,-148.73C147,-143.9 147,-138.52 147,-133.2"/>
+<polygon fill="#64818a" stroke="#64818a" points="149.45,-133.06 147,-126.06 144.55,-133.06 149.45,-133.06"/>
+</g>
+<!-- n2 -->
+<g class="node">
+<title>n2</title>
+<path fill="#d6f2e5" stroke="#8aaab5" d="M132,-46C132,-46 12,-46 12,-46 6,-46 0,-40 0,-34 0,-34 0,-12 0,-12 0,-6 6,0 12,0 12,0 132,0 132,0 138,0 144,-6 144,-12 144,-12 144,-34 144,-34 144,-40 138,-46 132,-46"/>
+<text text-anchor="middle" x="72" y="-26.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Quota disponible</text>
+<text text-anchor="middle" x="72" y="-11.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Requête traitée</text>
+</g>
+<!-- n1&#45;&gt;n2 -->
+<g class="edge">
+<title>n1&#45;&gt;n2</title>
+<path fill="none" stroke="#64818a" d="M125.71,-79.86C117.16,-70.96 107.22,-60.62 98.23,-51.27"/>
+<polygon fill="#64818a" stroke="#64818a" points="99.96,-49.55 93.34,-46.2 96.43,-52.94 99.96,-49.55"/>
+<text text-anchor="middle" x="134" y="-60.2" font-family="DejaVu Sans" font-size="11.00" fill="#3a5860">admise</text>
+</g>
+<!-- n3 -->
+<g class="node">
+<title>n3</title>
+<path fill="#ffdfd7" stroke="#8aaab5" d="M269.5,-46C269.5,-46 174.5,-46 174.5,-46 168.5,-46 162.5,-40 162.5,-34 162.5,-34 162.5,-12 162.5,-12 162.5,-6 168.5,0 174.5,0 174.5,0 269.5,0 269.5,0 275.5,0 281.5,-6 281.5,-12 281.5,-12 281.5,-34 281.5,-34 281.5,-40 275.5,-46 269.5,-46"/>
+<text text-anchor="middle" x="222" y="-26.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Quota épuisé</text>
+<text text-anchor="middle" x="222" y="-11.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">HTTP 429</text>
+</g>
+<!-- n1&#45;&gt;n3 -->
+<g class="edge">
+<title>n1&#45;&gt;n3</title>
+<path fill="none" stroke="#64818a" d="M168.29,-79.86C176.84,-70.96 186.78,-60.62 195.77,-51.27"/>
+<polygon fill="#64818a" stroke="#64818a" points="197.57,-52.94 200.66,-46.2 194.04,-49.55 197.57,-52.94"/>
+<text text-anchor="middle" x="209" y="-60.2" font-family="DejaVu Sans" font-size="11.00" fill="#3a5860">refusée</text>
+</g>
+</g>
+</svg>

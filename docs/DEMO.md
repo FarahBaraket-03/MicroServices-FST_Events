@@ -13,6 +13,8 @@
 
 ## 1. Show a normal request
 
+![Schéma attendu — Statistiques complètes](schemas/normal.svg)
+
 If the smoke test already passed and `reports/demo-ids.json` exists, reuse that event. Otherwise run this once. The script creates new demo records each time.
 
 ```powershell
@@ -39,6 +41,8 @@ Invoke-RestMethod $StatsUrl
 | [Logistics Swagger](http://localhost:8092/swagger-ui/index.html) and Docker Desktop | Show separate command and query routes, and the separate MySQL databases for business services. |
 
 ## 2. Show two participant instances
+
+![Schéma attendu — Répartition des requêtes](schemas/balance.svg)
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/load-balance.ps1
@@ -75,6 +79,8 @@ flowchart TD
 
 ### A. Service unavailable
 
+![Schéma attendu — Service arrêté](schemas/down.svg)
+
 | Stage | What to do | Expected result |
 | --- | --- | --- |
 | Before | Refresh the stats page. | Cost 50.00 and `degraded: false`. |
@@ -84,6 +90,10 @@ flowchart TD
 PowerShell equivalents: `docker compose stop logistics-service` and `docker compose start logistics-service`.
 
 ### B and C. Slow or incorrect response
+
+![Schéma attendu — Réponse lente](schemas/slow.svg)
+
+![Schéma attendu — Réponse incorrecte](schemas/invalid.svg)
 
 Enable the demo controls once for these two cases. The second Compose file adds the controls to your local services.
 
@@ -103,6 +113,8 @@ A `404` on the control URL is a reason to check that the demo overlay was applie
 
 ### D. Misconfigured URL
 
+![Schéma attendu — URL mal configurée](schemas/url.svg)
+
 The override makes Event Service call a deliberately incorrect logistics path.
 
 ```powershell
@@ -116,6 +128,8 @@ docker compose up -d --force-recreate --wait event-service
 ```
 
 ### E. Database unavailable
+
+![Schéma attendu — Base de données arrêtée](schemas/db.svg)
 
 | Stage | What to do | Expected result |
 | --- | --- | --- |
@@ -136,6 +150,8 @@ About two groups of three failed attempts can open the breaker under the demo se
 
 ## 4. Show the rate limiter
 
+![Schéma attendu — Limitation du débit](schemas/limit.svg)
+
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/rate-limit.ps1
 ```
@@ -143,6 +159,8 @@ powershell -ExecutionPolicy Bypass -File scripts/rate-limit.ps1
 The script sends concurrent requests and groups the status codes. Expect some **HTTP 429** responses if more than five statistics requests reach one Event Service instance in the same one-second window. If PowerShell spreads the requests out, rerun the test. The configured behavior is also covered by `ResiliencePolicyTest`.
 
 ## 5. Show CQRS in three windows
+
+![Schéma attendu — Commandes et projections](schemas/cqrs.svg)
 
 Use [Swagger](http://localhost:8092/swagger-ui/index.html) or your Postman collection. Use a fresh resource for the delete demonstration and keep the chairs linked to your demo event.
 

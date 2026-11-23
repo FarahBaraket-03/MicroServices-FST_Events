@@ -1,0 +1,76 @@
+<svg width="371pt" height="337pt"
+ viewBox="0.00 0.00 371.10 336.60" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g class="graph" transform="scale(1 1) rotate(0) translate(10.8 325.8)">
+<title>Base de données arrêtée</title>
+<!-- n0 -->
+<g class="node">
+<title>n0</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M135,-315C135,-315 12,-315 12,-315 6,-315 0,-309 0,-303 0,-303 0,-291 0,-291 0,-285 6,-279 12,-279 12,-279 135,-279 135,-279 141,-279 147,-285 147,-291 147,-291 147,-303 147,-303 147,-309 141,-315 135,-315"/>
+<text text-anchor="middle" x="73.5" y="-293.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Logistics en ligne</text>
+</g>
+<!-- n2 -->
+<g class="node">
+<title>n2</title>
+<path fill="#ffdfd7" stroke="#8aaab5" d="M287,-245C287,-245 44,-245 44,-245 38,-245 32,-239 32,-233 32,-233 32,-221 32,-221 32,-215 38,-209 44,-209 44,-209 287,-209 287,-209 293,-209 299,-215 299,-221 299,-221 299,-233 299,-233 299,-239 293,-245 287,-245"/>
+<text text-anchor="middle" x="165.5" y="-223.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Lecture de la projection impossible</text>
+</g>
+<!-- n0&#45;&gt;n2 -->
+<g class="edge">
+<title>n0&#45;&gt;n2</title>
+<path fill="none" stroke="#64818a" d="M96.72,-278.84C108.81,-269.9 123.72,-258.88 136.56,-249.39"/>
+<polygon fill="#64818a" stroke="#64818a" points="138.12,-251.28 142.29,-245.15 135.21,-247.34 138.12,-251.28"/>
+<text text-anchor="middle" x="147" y="-259.2" font-family="DejaVu Sans" font-size="11.00" fill="#3a5860">requête</text>
+</g>
+<!-- n1 -->
+<g class="node">
+<title>n1</title>
+<path fill="#ffdfd7" stroke="#8aaab5" d="M337.5,-315C337.5,-315 177.5,-315 177.5,-315 171.5,-315 165.5,-309 165.5,-303 165.5,-303 165.5,-291 165.5,-291 165.5,-285 171.5,-279 177.5,-279 177.5,-279 337.5,-279 337.5,-279 343.5,-279 349.5,-285 349.5,-291 349.5,-291 349.5,-303 349.5,-303 349.5,-309 343.5,-315 337.5,-315"/>
+<text text-anchor="middle" x="257.5" y="-293.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">MySQL Logistics arrêté</text>
+</g>
+<!-- n1&#45;&gt;n2 -->
+<g class="edge">
+<title>n1&#45;&gt;n2</title>
+<path fill="none" stroke="#64818a" d="M234.28,-278.84C222.19,-269.9 207.28,-258.88 194.44,-249.39"/>
+<polygon fill="#64818a" stroke="#64818a" points="195.79,-247.34 188.71,-245.15 192.88,-251.28 195.79,-247.34"/>
+</g>
+<!-- n3 -->
+<g class="node">
+<title>n3</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M282.5,-175C282.5,-175 48.5,-175 48.5,-175 42.5,-175 36.5,-169 36.5,-163 36.5,-163 36.5,-151 36.5,-151 36.5,-145 42.5,-139 48.5,-139 48.5,-139 282.5,-139 282.5,-139 288.5,-139 294.5,-145 294.5,-151 294.5,-151 294.5,-163 294.5,-163 294.5,-169 288.5,-175 282.5,-175"/>
+<text text-anchor="middle" x="165.5" y="-153.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Event renvoie des stats partielles</text>
+</g>
+<!-- n2&#45;&gt;n3 -->
+<g class="edge">
+<title>n2&#45;&gt;n3</title>
+<path fill="none" stroke="#64818a" d="M165.5,-208.84C165.5,-200.85 165.5,-191.2 165.5,-182.46"/>
+<polygon fill="#64818a" stroke="#64818a" points="167.95,-182.39 165.5,-175.39 163.05,-182.39 167.95,-182.39"/>
+<text text-anchor="middle" x="187" y="-189.2" font-family="DejaVu Sans" font-size="11.00" fill="#3a5860">fallback</text>
+</g>
+<!-- n4 -->
+<g class="node">
+<title>n4</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M228.5,-116C228.5,-116 102.5,-116 102.5,-116 96.5,-116 90.5,-110 90.5,-104 90.5,-104 90.5,-92 90.5,-92 90.5,-86 96.5,-80 102.5,-80 102.5,-80 228.5,-80 228.5,-80 234.5,-80 240.5,-86 240.5,-92 240.5,-92 240.5,-104 240.5,-104 240.5,-110 234.5,-116 228.5,-116"/>
+<text text-anchor="middle" x="165.5" y="-94.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">MySQL redémarre</text>
+</g>
+<!-- n3&#45;&gt;n4 -->
+<g class="edge">
+<title>n3&#45;&gt;n4</title>
+<path fill="none" stroke="#64818a" d="M165.5,-138.9C165.5,-133.94 165.5,-128.43 165.5,-123.12"/>
+<polygon fill="#64818a" stroke="#64818a" points="167.95,-123.09 165.5,-116.09 163.05,-123.09 167.95,-123.09"/>
+</g>
+<!-- n5 -->
+<g class="node">
+<title>n5</title>
+<path fill="#d6f2e5" stroke="#8aaab5" d="M220.5,-46C220.5,-46 110.5,-46 110.5,-46 104.5,-46 98.5,-40 98.5,-34 98.5,-34 98.5,-12 98.5,-12 98.5,-6 104.5,0 110.5,0 110.5,0 220.5,0 220.5,0 226.5,0 232.5,-6 232.5,-12 232.5,-12 232.5,-34 232.5,-34 232.5,-40 226.5,-46 220.5,-46"/>
+<text text-anchor="middle" x="165.5" y="-26.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Lecture rétablie</text>
+<text text-anchor="middle" x="165.5" y="-11.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Coût = 50 TND</text>
+</g>
+<!-- n4&#45;&gt;n5 -->
+<g class="edge">
+<title>n4&#45;&gt;n5</title>
+<path fill="none" stroke="#64818a" d="M165.5,-79.7C165.5,-71.78 165.5,-62.18 165.5,-53.19"/>
+<polygon fill="#64818a" stroke="#64818a" points="167.95,-53.16 165.5,-46.16 163.05,-53.16 167.95,-53.16"/>
+<text text-anchor="middle" x="202" y="-60.2" font-family="DejaVu Sans" font-size="11.00" fill="#3a5860">après reprise</text>
+</g>
+</g>
+</svg>

@@ -1,0 +1,89 @@
+<svg width="456pt" height="396pt"
+ viewBox="0.00 0.00 456.10 395.60" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g class="graph" transform="scale(1 1) rotate(0) translate(10.8 384.8)">
+<title>Commandes et projections</title>
+<!-- n0 -->
+<g class="node">
+<title>n0</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M324.5,-374C324.5,-374 138.5,-374 138.5,-374 132.5,-374 126.5,-368 126.5,-362 126.5,-362 126.5,-350 126.5,-350 126.5,-344 132.5,-338 138.5,-338 138.5,-338 324.5,-338 324.5,-338 330.5,-338 336.5,-344 336.5,-350 336.5,-350 336.5,-362 336.5,-362 336.5,-368 330.5,-374 324.5,-374"/>
+<text text-anchor="middle" x="231.5" y="-352.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Commande de réservation</text>
+</g>
+<!-- n1 -->
+<g class="node">
+<title>n1</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M292.5,-315C292.5,-315 170.5,-315 170.5,-315 164.5,-315 158.5,-309 158.5,-303 158.5,-303 158.5,-291 158.5,-291 158.5,-285 164.5,-279 170.5,-279 170.5,-279 292.5,-279 292.5,-279 298.5,-279 304.5,-285 304.5,-291 304.5,-291 304.5,-303 304.5,-303 304.5,-309 298.5,-315 292.5,-315"/>
+<text text-anchor="middle" x="231.5" y="-293.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Agrégat Logistics</text>
+</g>
+<!-- n0&#45;&gt;n1 -->
+<g class="edge">
+<title>n0&#45;&gt;n1</title>
+<path fill="none" stroke="#64818a" d="M231.5,-337.9C231.5,-332.94 231.5,-327.43 231.5,-322.12"/>
+<polygon fill="#64818a" stroke="#64818a" points="233.95,-322.09 231.5,-315.09 229.05,-322.09 233.95,-322.09"/>
+</g>
+<!-- n2 -->
+<g class="node">
+<title>n2</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M204,-240C204,-240 53,-240 53,-240 47,-240 41,-234 41,-228 41,-228 41,-216 41,-216 41,-210 47,-204 53,-204 53,-204 204,-204 204,-204 210,-204 216,-210 216,-216 216,-216 216,-228 216,-228 216,-234 210,-240 204,-240"/>
+<text text-anchor="middle" x="128.5" y="-218.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Réservation acceptée</text>
+</g>
+<!-- n1&#45;&gt;n2 -->
+<g class="edge">
+<title>n1&#45;&gt;n2</title>
+<path fill="none" stroke="#64818a" d="M207.35,-278.88C192.76,-268.54 174.04,-255.27 158.5,-244.26"/>
+<polygon fill="#64818a" stroke="#64818a" points="159.63,-242.06 152.5,-240.01 156.79,-246.05 159.63,-242.06"/>
+<text text-anchor="middle" x="246.5" y="-259.2" font-family="DejaVu Sans" font-size="11.00" fill="#3a5860">ressource disponible</text>
+</g>
+<!-- n6 -->
+<g class="node">
+<title>n6</title>
+<path fill="#ffdfd7" stroke="#8aaab5" d="M422.5,-245C422.5,-245 246.5,-245 246.5,-245 240.5,-245 234.5,-239 234.5,-233 234.5,-233 234.5,-211 234.5,-211 234.5,-205 240.5,-199 246.5,-199 246.5,-199 422.5,-199 422.5,-199 428.5,-199 434.5,-205 434.5,-211 434.5,-211 434.5,-233 434.5,-233 434.5,-239 428.5,-245 422.5,-245"/>
+<text text-anchor="middle" x="334.5" y="-225.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Déjà réservée</text>
+<text text-anchor="middle" x="334.5" y="-210.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Rejet attendu : HTTP 409</text>
+</g>
+<!-- n1&#45;&gt;n6 -->
+<g class="edge">
+<title>n1&#45;&gt;n6</title>
+<path fill="none" stroke="#64818a" d="M290.58,-278.91C296.63,-275.83 302.41,-272.22 307.5,-268 312.97,-263.47 317.62,-257.52 321.43,-251.44"/>
+<polygon fill="#64818a" stroke="#64818a" points="323.56,-252.64 324.97,-245.36 319.33,-250.18 323.56,-252.64"/>
+<text text-anchor="middle" x="372.5" y="-259.2" font-family="DejaVu Sans" font-size="11.00" fill="#3a5860">réservation répétée</text>
+</g>
+<!-- n3 -->
+<g class="node">
+<title>n3</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M245,-176C245,-176 12,-176 12,-176 6,-176 0,-170 0,-164 0,-164 0,-152 0,-152 0,-146 6,-140 12,-140 12,-140 245,-140 245,-140 251,-140 257,-146 257,-152 257,-152 257,-164 257,-164 257,-170 251,-176 245,-176"/>
+<text text-anchor="middle" x="128.5" y="-154.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Événement enregistré dans Axon</text>
+</g>
+<!-- n2&#45;&gt;n3 -->
+<g class="edge">
+<title>n2&#45;&gt;n3</title>
+<path fill="none" stroke="#64818a" d="M128.5,-203.73C128.5,-197.41 128.5,-190.15 128.5,-183.33"/>
+<polygon fill="#64818a" stroke="#64818a" points="130.95,-183.18 128.5,-176.18 126.05,-183.18 130.95,-183.18"/>
+</g>
+<!-- n4 -->
+<g class="node">
+<title>n4</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M230.5,-106C230.5,-106 26.5,-106 26.5,-106 20.5,-106 14.5,-100 14.5,-94 14.5,-94 14.5,-82 14.5,-82 14.5,-76 20.5,-70 26.5,-70 26.5,-70 230.5,-70 230.5,-70 236.5,-70 242.5,-76 242.5,-82 242.5,-82 242.5,-94 242.5,-94 242.5,-100 236.5,-106 230.5,-106"/>
+<text text-anchor="middle" x="128.5" y="-84.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Projection MySQL mise à jour</text>
+</g>
+<!-- n3&#45;&gt;n4 -->
+<g class="edge">
+<title>n3&#45;&gt;n4</title>
+<path fill="none" stroke="#64818a" d="M128.5,-139.84C128.5,-131.85 128.5,-122.2 128.5,-113.46"/>
+<polygon fill="#64818a" stroke="#64818a" points="130.95,-113.39 128.5,-106.39 126.05,-113.39 130.95,-113.39"/>
+<text text-anchor="middle" x="157" y="-120.2" font-family="DejaVu Sans" font-size="11.00" fill="#3a5860">projecteur</text>
+</g>
+<!-- n5 -->
+<g class="node">
+<title>n5</title>
+<path fill="#d6f2e5" stroke="#8aaab5" d="M220,-36C220,-36 37,-36 37,-36 31,-36 25,-30 25,-24 25,-24 25,-12 25,-12 25,-6 31,0 37,0 37,0 220,0 220,0 226,0 232,-6 232,-12 232,-12 232,-24 232,-24 232,-30 226,-36 220,-36"/>
+<text text-anchor="middle" x="128.5" y="-14.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">GET → ressource réservée</text>
+</g>
+<!-- n4&#45;&gt;n5 -->
+<g class="edge">
+<title>n4&#45;&gt;n5</title>
+<path fill="none" stroke="#64818a" d="M128.5,-69.84C128.5,-61.85 128.5,-52.2 128.5,-43.46"/>
+<polygon fill="#64818a" stroke="#64818a" points="130.95,-43.39 128.5,-36.39 126.05,-43.39 130.95,-43.39"/>
+<text text-anchor="middle" x="167" y="-50.2" font-family="DejaVu Sans" font-size="11.00" fill="#3a5860">query handler</text>
+</g>
+</g>
+</svg>

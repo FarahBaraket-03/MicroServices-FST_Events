@@ -1,0 +1,64 @@
+<svg width="233pt" height="336pt"
+ viewBox="0.00 0.00 232.60 335.60" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g class="graph" transform="scale(1 1) rotate(0) translate(10.8 324.8)">
+<title>Réponse incorrecte</title>
+<!-- n0 -->
+<g class="node">
+<title>n0</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M199,-314C199,-314 12,-314 12,-314 6,-314 0,-308 0,-302 0,-302 0,-290 0,-290 0,-284 6,-278 12,-278 12,-278 199,-278 199,-278 205,-278 211,-284 211,-290 211,-290 211,-302 211,-302 211,-308 205,-314 199,-314"/>
+<text text-anchor="middle" x="105.5" y="-292.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Logistics répond HTTP 200</text>
+</g>
+<!-- n1 -->
+<g class="node">
+<title>n1</title>
+<path fill="#ffdfd7" stroke="#8aaab5" d="M165.5,-255C165.5,-255 45.5,-255 45.5,-255 39.5,-255 33.5,-249 33.5,-243 33.5,-243 33.5,-231 33.5,-231 33.5,-225 39.5,-219 45.5,-219 45.5,-219 165.5,-219 165.5,-219 171.5,-219 177.5,-225 177.5,-231 177.5,-231 177.5,-243 177.5,-243 177.5,-249 171.5,-255 165.5,-255"/>
+<text text-anchor="middle" x="105.5" y="-233.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Contenu invalide</text>
+</g>
+<!-- n0&#45;&gt;n1 -->
+<g class="edge">
+<title>n0&#45;&gt;n1</title>
+<path fill="none" stroke="#64818a" d="M105.5,-277.9C105.5,-272.94 105.5,-267.43 105.5,-262.12"/>
+<polygon fill="#64818a" stroke="#64818a" points="107.95,-262.09 105.5,-255.09 103.05,-262.09 107.95,-262.09"/>
+</g>
+<!-- n2 -->
+<g class="node">
+<title>n2</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M195,-196C195,-196 16,-196 16,-196 10,-196 4,-190 4,-184 4,-184 4,-172 4,-172 4,-166 10,-160 16,-160 16,-160 195,-160 195,-160 201,-160 207,-166 207,-172 207,-172 207,-184 207,-184 207,-190 201,-196 195,-196"/>
+<text text-anchor="middle" x="105.5" y="-174.3" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Event rejette les données</text>
+</g>
+<!-- n1&#45;&gt;n2 -->
+<g class="edge">
+<title>n1&#45;&gt;n2</title>
+<path fill="none" stroke="#64818a" d="M105.5,-218.9C105.5,-213.94 105.5,-208.43 105.5,-203.12"/>
+<polygon fill="#64818a" stroke="#64818a" points="107.95,-203.09 105.5,-196.09 103.05,-203.09 107.95,-203.09"/>
+</g>
+<!-- n3 -->
+<g class="node">
+<title>n3</title>
+<path fill="#eef5f7" stroke="#8aaab5" d="M167,-126C167,-126 44,-126 44,-126 38,-126 32,-120 32,-114 32,-114 32,-92 32,-92 32,-86 38,-80 44,-80 44,-80 167,-80 167,-80 173,-80 179,-86 179,-92 179,-92 179,-114 179,-114 179,-120 173,-126 167,-126"/>
+<text text-anchor="middle" x="105.5" y="-106.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Réponse partielle</text>
+<text text-anchor="middle" x="105.5" y="-91.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Coût inconnu</text>
+</g>
+<!-- n2&#45;&gt;n3 -->
+<g class="edge">
+<title>n2&#45;&gt;n3</title>
+<path fill="none" stroke="#64818a" d="M105.5,-159.7C105.5,-151.78 105.5,-142.18 105.5,-133.19"/>
+<polygon fill="#64818a" stroke="#64818a" points="107.95,-133.16 105.5,-126.16 103.05,-133.16 107.95,-133.16"/>
+<text text-anchor="middle" x="127" y="-140.2" font-family="DejaVu Sans" font-size="11.00" fill="#3a5860">fallback</text>
+</g>
+<!-- n4 -->
+<g class="node">
+<title>n4</title>
+<path fill="#d6f2e5" stroke="#8aaab5" d="M187.5,-46C187.5,-46 23.5,-46 23.5,-46 17.5,-46 11.5,-40 11.5,-34 11.5,-34 11.5,-12 11.5,-12 11.5,-6 17.5,0 23.5,0 23.5,0 187.5,0 187.5,0 193.5,0 199.5,-6 199.5,-12 199.5,-12 199.5,-34 199.5,-34 199.5,-40 193.5,-46 187.5,-46"/>
+<text text-anchor="middle" x="105.5" y="-26.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Réponse valide rétablie</text>
+<text text-anchor="middle" x="105.5" y="-11.8" font-family="DejaVu Sans" font-size="14.00" fill="#183a42">Coût = 50 TND</text>
+</g>
+<!-- n3&#45;&gt;n4 -->
+<g class="edge">
+<title>n3&#45;&gt;n4</title>
+<path fill="none" stroke="#64818a" d="M105.5,-79.86C105.5,-71.62 105.5,-62.15 105.5,-53.37"/>
+<polygon fill="#64818a" stroke="#64818a" points="107.95,-53.2 105.5,-46.2 103.05,-53.2 107.95,-53.2"/>
+<text text-anchor="middle" x="142" y="-60.2" font-family="DejaVu Sans" font-size="11.00" fill="#3a5860">après reprise</text>
+</g>
+</g>
+</svg>
