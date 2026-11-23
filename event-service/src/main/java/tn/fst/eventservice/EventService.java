@@ -6,6 +6,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import tn.fst.shared.Models.*;
 
@@ -14,7 +16,10 @@ public class EventService {
   private final EventRepository repository;
   private final RemoteCatalogService remote;
 
-  public EventService(EventRepository repository, RemoteCatalogService remote) {
+  private final BookingNotices notices;
+
+  public EventService(EventRepository repository, RemoteCatalogService remote, BookingNotices notices) {
+    this.notices = notices;
     this.repository = repository;
     this.remote = remote;
   }
@@ -27,30 +32,61 @@ public class EventService {
     return find(id).view();
   }
 
+  @Transactional(isolation = Isolation.READ_COMMITTED)
   public EventView create(EventInput input) {
     validate(input);
+    checkAvailability(input, null);
     EventEntity e = new EventEntity();
     e.update(input);
-    return repository.save(e).view();
+    repository.save(e);
+    for (String resource : e.logisticsIds) notices.save(new BookingNotice(e, resource, true));
+    return e.view();
   }
 
+  @Transactional(isolation = Isolation.READ_COMMITTED)
   public EventView update(Long id, EventInput input) {
     EventEntity e = find(id);
     validate(input);
+    checkAvailability(input, id);
+    Set<String> old = Set.copyOf(e.logisticsIds);
+    boolean datesChanged = !e.dateDebut.equals(input.dateDebut()) || !e.dateFin.equals(input.dateFin());
+    for (String resource : old)
+      if (!input.logisticsIds().contains(resource) || datesChanged)
+        notices.save(new BookingNotice(e, resource, false));
     e.update(input);
+    for (String resource : e.logisticsIds)
+      if (!old.contains(resource) || datesChanged)
+        notices.save(new BookingNotice(e, resource, true));
     e.cout = null;
     e.costUpdatedAt = null;
     return repository.save(e).view();
   }
 
+  @Transactional
   public void delete(Long id) {
-    repository.delete(find(id));
+    var event = find(id);
+    for (String resource : event.logisticsIds) notices.save(new BookingNotice(event, resource, false));
+    repository.delete(event);
   }
 
   private EventEntity find(Long id) {
     return repository
         .findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+  }
+
+  private void checkAvailability(EventInput input, Long currentEvent) {
+    if (input.logisticsIds().isEmpty()) return;
+    // A stable lock per resource also protects the first booking. Ordering prevents
+    // competing multi-resource requests from taking these locks in opposite order.
+    for (String id : new TreeSet<>(input.logisticsIds())) {
+      repository.lockBookingResource(id);
+    }
+    if (repository.overlappingBookings(
+            input.logisticsIds(), input.dateDebut(), input.dateFin(), currentEvent) > 0) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "Une ressource logistique est déjà affectée à un événement sur cette période.");
+    }
   }
 
   private void validate(EventInput input) {

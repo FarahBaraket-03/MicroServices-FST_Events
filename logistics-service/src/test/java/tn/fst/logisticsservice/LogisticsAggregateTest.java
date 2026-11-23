@@ -55,7 +55,7 @@ class LogisticsAggregateTest {
     fixture
         .given(new Created("a", "Chairs", true, price, 4))
         .when(new Reserve("a", true))
-        .expectException(IllegalArgumentException.class)
+        .expectException(org.axonframework.commandhandling.CommandExecutionException.class)
         .expectNoEvents();
   }
 
@@ -64,8 +64,8 @@ class LogisticsAggregateTest {
     fixture
         .given(new Created("a", "Chairs", true, price, 4))
         .when(new Delete("a"))
-        .expectException(IllegalArgumentException.class)
-        .expectNoEvents();
+        .expectResultMessagePayload("RESERVED_DELETE_CONFLICT")
+        .expectEvents(new DeletionRefused("a", "RESOURCE_RESERVED"));
   }
 
   @Test

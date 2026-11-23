@@ -34,6 +34,8 @@ public final class LogisticsMessages {
 
   public record Reserved(String id, boolean reserve) {}
 
+  public record DeletionRefused(String id, String reason) {}
+
   public record Deleted(String id) {}
 
   public record FindOne(String id) {}

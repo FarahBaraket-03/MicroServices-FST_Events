@@ -17,6 +17,7 @@ export class ApiService {
  logistics(){return this.http.get<Logistics[]>(`${this.prefix}/logistics/queries`);}
  addLogistics(l:Logistics){return this.http.post(`${this.prefix}/logistics/commands`,l);}
  updateLogistics(l:Logistics){return this.http.put(`${this.prefix}/logistics/commands/${l.idLog}`,l);}
+ reserveLogistics(id:string,reserved:boolean){return this.http.put(`${this.prefix}/logistics/commands/${id}/reservation`,null,{params:{reserved}});}
  deleteLogistics(id:string){return this.http.delete(`${this.prefix}/logistics/commands/${id}`);}
  // A command acknowledgement does not imply its asynchronous projection is ready.
  waitForProjection(){return timer(600);}

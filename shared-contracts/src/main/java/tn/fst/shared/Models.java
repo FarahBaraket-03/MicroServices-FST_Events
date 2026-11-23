@@ -9,6 +9,9 @@ import java.util.*;
 public final class Models {
   private Models() {}
 
+  public record BookingChange(String operationId, Long eventId, String resourceId,
+      LocalDate startDate, LocalDate endDate, boolean assigned) {}
+
   public enum Tache {
     INVITE,
     ORGANISATEUR,

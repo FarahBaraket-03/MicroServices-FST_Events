@@ -19,7 +19,7 @@ class EventServiceTest {
   void setup() {
     repository = mock(EventRepository.class);
     remote = mock(RemoteCatalogService.class);
-    service = new EventService(repository, remote);
+    service = new EventService(repository, remote, mock(BookingNotices.class));
     event = new EventEntity();
     event.id = 1L;
     event.description = "Conference";

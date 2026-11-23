@@ -29,22 +29,29 @@ public class LogisticsAggregate {
   public void handle(Update cmd) {
     active();
     validate(cmd.description(), cmd.prixUnit(), cmd.quantite());
-    apply(new Updated(id, cmd.description().trim(), cmd.reserve(), cmd.prixUnit(), cmd.quantite()));
+    boolean changed = reserved != cmd.reserve();
+    apply(new Updated(id, cmd.description().trim(), reserved, cmd.prixUnit(), cmd.quantite()));
+    if (changed) apply(new Reserved(id, cmd.reserve()));
   }
 
   @CommandHandler
   public void handle(Reserve cmd) {
     active();
     if (reserved == cmd.reserve())
-      throw new IllegalArgumentException("Resource already has this reservation state");
+      throw new org.axonframework.commandhandling.CommandExecutionException(
+          "Resource already has this reservation state", null, "RESERVATION_STATE_CONFLICT");
     apply(new Reserved(id, cmd.reserve()));
   }
 
   @CommandHandler
-  public void handle(Delete cmd) {
+  public String handle(Delete cmd) {
     active();
-    if (reserved) throw new IllegalArgumentException("Release the resource before deleting it");
+    if (reserved) {
+      apply(new DeletionRefused(id, "RESOURCE_RESERVED"));
+      return "RESERVED_DELETE_CONFLICT";
+    }
     apply(new Deleted(id));
+    return "DELETED";
   }
 
   @EventSourcingHandler

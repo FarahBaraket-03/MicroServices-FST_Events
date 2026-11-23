@@ -76,7 +76,9 @@ public List<LogisticsView> all() {
 
   private void send(Object command) {
     try {
-      commands.send(command).get(5, TimeUnit.SECONDS);
+      Object outcome = commands.send(command).get(5, TimeUnit.SECONDS);
+      if ("RESERVED_DELETE_CONFLICT".equals(outcome))
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "Libérez la ressource avant de la supprimer.");
     } catch (java.util.concurrent.TimeoutException e) {
       throw new ResponseStatusException(
           HttpStatus.GATEWAY_TIMEOUT,
@@ -89,6 +91,17 @@ public List<LogisticsView> all() {
       Throwable cause = e.getCause();
       if (cause instanceof org.axonframework.modelling.command.AggregateNotFoundException)
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found", e);
+      for (Throwable failure = cause; failure != null; failure = failure.getCause()) {
+        if (failure instanceof org.axonframework.commandhandling.CommandExecutionException commandFailure) {
+          Object detail = commandFailure.getDetails().orElse(null);
+          if ("RESERVATION_STATE_CONFLICT".equals(detail))
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                "La ressource est déjà dans cet état de réservation.", e);
+          if ("RESERVED_DELETE_CONFLICT".equals(detail))
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                "Libérez la ressource avant de la supprimer.", e);
+        }
+      }
       if (cause instanceof IllegalArgumentException)
         throw new ResponseStatusException(HttpStatus.CONFLICT, cause.getMessage(), e);
       throw new ResponseStatusException(

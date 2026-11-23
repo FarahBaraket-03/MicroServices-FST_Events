@@ -44,6 +44,24 @@ class LogisticsApiIntegrationTest {
 
   @Autowired MockMvc mvc;
   @Autowired ObjectMapper json;
+  @Autowired org.axonframework.eventsourcing.eventstore.EventStore store;
+
+  @Test
+  void planningHistoryIsIdempotent() throws Exception {
+    var body = """
+        {"operationId":"msg-1","eventId":12,"resourceId":"projector","startDate":"2027-01-01",
+         "endDate":"2027-01-03","assigned":true}
+        """;
+    for (int attempt = 0; attempt < 2; attempt++) {
+      mvc.perform(post("/internal/booking-history").contentType("application/json").content(body))
+          .andExpect(status().isOk());
+    }
+    var stream = store.readEvents("planning-projector");
+    var change = (tn.fst.shared.Models.BookingChange) stream.next().getPayload();
+    org.junit.jupiter.api.Assertions.assertEquals(12L, change.eventId());
+    org.junit.jupiter.api.Assertions.assertFalse(stream.hasNext());
+  }
+
 
   @Test
   void commandEventProjectionQueryAndRejectedTransition() throws Exception {

@@ -48,7 +48,13 @@ export class AppComponent implements OnInit {
   newLogistic(){this.logistic=this.emptyLogistic();this.editingLogistics=true;this.error='';}
   editLogistic(l:Logistics){this.logistic={...l};this.editingLogistics=true;this.error='';}
   saveLogistic(){if(!this.logistic.description.trim()||this.logistic.prixUnit<0||this.logistic.quantite<1)return;
-    this.busy=true;const op=this.logistic.idLog?this.api.updateLogistics(this.logistic):this.api.addLogistics(this.logistic);
+    this.busy=true;
+    const l=this.logistic;
+    const original=this.logistics.find(item=>item.idLog===l.idLog);
+    const onlyReservation=original && original.reserve!==l.reserve &&
+      original.description===l.description && original.prixUnit===l.prixUnit && original.quantite===l.quantite;
+    const op=!l.idLog ? this.api.addLogistics(l) : onlyReservation
+      ? this.api.reserveLogistics(l.idLog,l.reserve) : this.api.updateLogistics(l);
     op.subscribe({next:()=>{this.editingLogistics=false;this.success='Commande acceptée. Actualisez si la projection est encore en cours.';this.api.waitForProjection().subscribe(()=>this.reload())},error:e=>this.fail(e)});
   }
   removeLogistic(l:Logistics){if(l.idLog==null||!confirm(`Supprimer « ${l.description} » ?`))return;
